@@ -1,0 +1,5 @@
+scikit-learn=0.18.*
+pandas=0.19.*
+numexpr
+bottleneck
+scipy=0.18.*
