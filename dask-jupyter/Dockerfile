@@ -16,4 +16,3 @@ RUN jupyter nbextension enable --py widgetsnbextension && \
     jupyter nbextension install --py rise && \
     jupyter nbextension enable --py rise
 EXPOSE 8888
-ENTRYPOINT ["bash", "-c", "jupyter-notebook --no-browser --ip='*'"]
