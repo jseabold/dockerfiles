@@ -11,7 +11,7 @@ dependencies:
     - docker info
     - if [[ -e ~/docker/images.tar ]]; then docker load --input ~/docker/images.tar; fi
     - python build.py
-    - mkdir -p ~/docker; docker save --output ~/docker/images.tar $(docker image --format "{{.Repository}}:{{.Tag}}" | tr '\n' ' ')
+    - mkdir -p ~/docker; docker save --output ~/docker/images.tar $(docker images --format "{{.Repository}}:{{.Tag}}" | tr '\n' ' ')
 
 deployment:
   hub:
