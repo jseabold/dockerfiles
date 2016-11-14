@@ -1,4 +1,4 @@
-#! /bin/env python
+#! /usr/bin/env python
 
 import glob
 import os
@@ -10,15 +10,18 @@ DOCKER_REPO_PREFIX = 'jseabold'
 
 
 def build(base, tag):
+    print("Building {}".format(tag))
     # use the go client
     p = subprocess.Popen(["docker", "build", "--pull", "-t", tag, base],
                          stdout=PIPE)
-    for line in iter(p.stdout.readline, ''):
+    for line in iter(p.stdout.readline, b''):
         sys.stdout.write(line.decode())
 
 
 def main():
     dockerfiles = glob.glob("*/Dockerfile")
+    dockerfiles.sort()
+
     for dockerfile in dockerfiles:
         base = os.path.dirname(dockerfile)
         tag = os.path.join(DOCKER_REPO_PREFIX, ':'.join((base, 'latest')))
