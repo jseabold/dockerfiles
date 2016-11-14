@@ -11,8 +11,8 @@ DOCKER_REPO_PREFIX = 'jseabold'
 
 def build(base, tag):
     # use the go client
-    p = subprocess.Popen(["docker", "build", "--rm", "--pull", "-t", tag,
-                          base], stdout=PIPE)
+    p = subprocess.Popen(["docker", "build", "--pull", "-t", tag, base],
+                         stdout=PIPE)
     for line in iter(p.stdout.readline, ''):
         sys.stdout.write(line.decode())
 
