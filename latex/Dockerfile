@@ -19,4 +19,4 @@ RUN apt-get -y --no-install-recommends install \
 
 VOLUME ["/output"]
 WORKDIR /output
-ENTRYPOINT ["bash", "-c", "pdflatex"]
+ENTRYPOINT ["/usr/bin/pdflatex"]
