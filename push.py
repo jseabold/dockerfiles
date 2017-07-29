@@ -1,5 +1,11 @@
 #!/bin/env python
 
+import glob
+import os
+import sys
+import subprocess
+from subprocess import PIPE
+
 DOCKER_REPO_PREFIX = 'jseabold'
 
 
