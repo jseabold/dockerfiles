@@ -9,10 +9,10 @@ import sys
 DOCKER_REPO_PREFIX = 'jseabold'
 
 
-def build(base, tag):
-    print("Building {}".format(tag))
+def build(base, repo):
+    print("Building {}".format(repo))
     # use the go client
-    p = subprocess.Popen(["docker", "build", "--pull", "-t", tag, base],
+    p = subprocess.Popen(["docker", "build", "--pull", "-t", repo, base],
                          stdout=PIPE)
     for line in iter(p.stdout.readline, b''):
         sys.stdout.write(line.decode())
@@ -24,8 +24,9 @@ def main():
 
     for dockerfile in dockerfiles:
         base = os.path.dirname(dockerfile)
-        tag = os.path.join(DOCKER_REPO_PREFIX, ':'.join((base, 'latest')))
-        build(base, tag)
+        tag = os.environ.get("TAG", "latest")
+        repo = os.path.join(DOCKER_REPO_PREFIX, ':'.join((base, tag)))
+        build(base, repo)
 
 
 if __name__ == "__main__":
