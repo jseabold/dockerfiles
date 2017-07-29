@@ -14,6 +14,9 @@ RUN apt-get update -q && \
         tipa latex-xcolor latex-beamer prosper pgf \
         python-pygments gnuplot
 
+RUN apt-get -y --no-install-recommends install \
+        lmodern
+
 VOLUME ["/output"]
 WORKDIR /output
 ENTRYPOINT ["bash", "-c", "pdflatex"]
