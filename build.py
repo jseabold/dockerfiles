@@ -6,13 +6,12 @@ import subprocess
 from subprocess import PIPE
 import sys
 
-DOCKER_REPO_PREFIX = 'jseabold'
+from util import get_repo_and_tag
 
-
-def build(base, repo):
-    print("Building {}".format(repo))
+def build(base, repo_tag):
+    print("Building {}".format(repo_tag))
     # use the go client
-    p = subprocess.Popen(["docker", "build", "--pull", "-t", repo, base],
+    p = subprocess.Popen(["docker", "build", "--pull", "-t", repo_tag, base],
                          stdout=PIPE)
     for line in iter(p.stdout.readline, b''):
         sys.stdout.write(line.decode())
@@ -23,10 +22,8 @@ def main():
     dockerfiles.sort()
 
     for dockerfile in dockerfiles:
-        base = os.path.dirname(dockerfile)
-        tag = os.environ.get("TAG", "latest")
-        repo = os.path.join(DOCKER_REPO_PREFIX, ':'.join((base, tag)))
-        build(base, repo)
+        base, repo_tag = get_repo_and_tag(dockerfile)
+        build(base, repo_tag)
 
 
 if __name__ == "__main__":
