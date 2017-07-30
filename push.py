@@ -17,6 +17,8 @@ def push(repo_tag):
 
 def main():
     dockerfiles = glob.glob("*/Dockerfile")
+    dockerfiles.sort()
+
     for dockerfile in dockerfiles:
         _, repo_tag = get_repo_and_tag(dockerfile)
         push(repo_tag)
