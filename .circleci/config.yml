@@ -17,7 +17,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               export TAG=0.1.$CIRCLE_BUILD_NUM;
               docker login -u $DOCKER_USER -p $DOCKER_PASS;
-              python push.py;
+              python -u push.py;
             else
               echo "Not deploying on pull request";
             fi
