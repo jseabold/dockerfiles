@@ -8,6 +8,7 @@ import sys
 
 from util import get_repo_and_tag
 
+
 def build(base, repo_tag):
     print("Building {}".format(repo_tag))
     # use the go client

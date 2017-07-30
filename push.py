@@ -1,17 +1,17 @@
-#!/bin/env python
+#! /usr/bin/env python
 
 import glob
 import os
-import sys
 import subprocess
 from subprocess import PIPE
+import sys
 
 from util import get_repo_and_tag
 
 
 def push(repo_tag):
     p = subprocess.Popen(["docker", "push", repo_tag], stdout=PIPE)
-    for line in iter(p.stdout.readline, ''):
+    for line in iter(p.stdout.readline, b''):
         sys.stdout.write(line.decode())
 
 
