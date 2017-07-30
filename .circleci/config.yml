@@ -18,9 +18,6 @@ jobs:
             if [ 1 ]; then
               docker ps -a
               docker images
-              docker rm $(docker ps -aq 2)
-              docker rm -v $(docker ps --filter status=exited -q 2)
-              docker rmi $(docker images -q --filter "dangling=true")
               export TAG=0.1.$CIRCLE_BUILD_NUM;
               docker login -u $DOCKER_USER -p $DOCKER_PASS;
               python -u push.py;
