@@ -11,11 +11,11 @@ jobs:
           command: |
             export TAG=0.1.$CIRCLE_BUILD_NUM
             python build.py
-      - run:
+      - deploy:
           name: Push Docker Images
           # Try to avoid OOM issues, even though there shouldn't be any dangling images
           command: |
-            if [ 1 ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker ps -a
               docker images
               export TAG=0.1.$CIRCLE_BUILD_NUM;
