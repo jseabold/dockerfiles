@@ -1,21 +1,26 @@
 #! /usr/bin/env python
 
 import glob
-import os
-import subprocess
-from subprocess import PIPE
+import docker
 import sys
 
 from util import get_repo_and_tag
 
 
+docker_client = docker.from_env()
+raw_client = docker.APIClient()
+
+
 def build(base, repo_tag):
     print("Building {}".format(repo_tag))
-    # use the go client
-    p = subprocess.Popen(["docker", "build", "--pull", "-t", repo_tag, base],
-                         stdout=PIPE)
-    for line in iter(p.stdout.readline, b''):
-        sys.stdout.write(line.decode())
+    stream = raw_client.build(pull=True, tag=repo_tag, path=base, decode=True)
+    for line in stream:
+        # i'm not sure where these returns are documented
+        for line_type, output in line.items():
+            sys.stdout.write(output)
+            if line_type != 'stream':
+                sys.stdout.write('\n')
+    return docker_client.images.get(repo_tag)
 
 
 def main():
@@ -24,7 +29,7 @@ def main():
 
     for dockerfile in dockerfiles:
         base, repo_tag = get_repo_and_tag(dockerfile)
-        build(base, repo_tag)
+        image = build(base, repo_tag)
 
 
 if __name__ == "__main__":

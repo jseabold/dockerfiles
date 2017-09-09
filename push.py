@@ -1,18 +1,20 @@
 #! /usr/bin/env python
 
 import glob
-import os
-import subprocess
-from subprocess import PIPE
-import sys
+from pprint import pprint
+
+import docker
 
 from util import get_repo_and_tag
 
+docker_client = docker.from_env()
+
 
 def push(repo_tag):
-    p = subprocess.Popen(["docker", "push", repo_tag], stdout=PIPE)
-    for line in iter(p.stdout.readline, b''):
-        sys.stdout.write(line.decode())
+    stream = docker_client.images.push(repo_tag, stream=True, decode=True)
+    # not going to try to make this nice looking for now
+    for items in stream:
+        pprint(items)
 
 
 def main():
