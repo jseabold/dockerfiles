@@ -14,5 +14,5 @@ jobs:
             else
               echo "Not deploying on pull request";
             fi
-            pip install -r requirements.txt
+            pip install --user -r requirements.txt
             python -u build.py
