@@ -90,11 +90,12 @@ def main():
             continue
 
         repo_tag = ":".join((repo, tag))
-        print(repo_tag)
-        print("Building")
-        print("Pushing")
-        # build(base, repo_tag)
-        # push(repo_tag)
+        build(base, repo_tag)
+        if os.environ["CIRCLE_BRANCH"] == "master":
+            push(repo_tag)
+
+        # err on the side of removing everything for now
+        docker_client.images.remove(repo_tag)
 
 
 if __name__ == "__main__":
