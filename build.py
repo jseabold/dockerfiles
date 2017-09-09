@@ -2,18 +2,20 @@
 
 import glob
 import os
-from pprint import pprint
+import requests
+import subprocess
+from subprocess import PIPE
 import sys
 import urllib
 import yaml
 
-import docker
-import requests
-
 
 DOCKER_REPO_PREFIX = 'jseabold'
-docker_client = docker.from_env()
-raw_client = docker.APIClient()
+
+
+def write_subprocess(p):
+    for line in iter(p.stdout.readline, b''):
+        sys.stdout.write(line.decode())
 
 
 def get_repo_and_tag(dockerfile):
@@ -57,21 +59,19 @@ def get_tags(repo):
 
 def build(base, repo_tag):
     print("Building {}".format(repo_tag))
-    stream = raw_client.build(pull=True, tag=repo_tag, path=base, decode=True)
-    for line in stream:
-        # i'm not sure where these returns are documented
-        for line_type, output in line.items():
-            sys.stdout.write(output)
-            if line_type != 'stream':
-                sys.stdout.write('\n')
+
+    # use the go client. the python client requires unix sockets
+    #
+    p = subprocess.Popen(["docker", "build", "--pull", "-t", repo_tag, base],
+                         stdout=PIPE)
+    write_subprocess(p)
 
 
 def push(repo_tag):
     print("Pushing {}".format(repo_tag))
-    stream = docker_client.images.push(repo_tag, stream=True, decode=True)
-    # not going to try to make this nice looking for now
-    for items in stream:
-        pprint(items)
+
+    p = subprocess.Popen(["docker", "push", repo_tag], stdout=PIPE)
+    write_subprocess(p)
 
 
 def main():
@@ -95,7 +95,8 @@ def main():
             push(repo_tag)
 
         # err on the side of removing everything for now
-        docker_client.images.remove(repo_tag)
+        p = subprocess.Popen(["docker", "rmi", repo_tag], stdout=PIPE)
+        write_subprocess(p)
 
 
 if __name__ == "__main__":
