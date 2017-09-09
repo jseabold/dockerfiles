@@ -1,0 +1,10 @@
+chrome: 1
+dask-jupyter: 1
+dask-scheduler: 1
+dask-worker: 1
+latex: 1
+lightfm: 1
+miniconda3: 1
+pia-openvpn: 1
+psql: 1
+scala-sbt: 1
