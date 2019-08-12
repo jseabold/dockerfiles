@@ -7,6 +7,7 @@ RUN apt-get update -q && \
         texlive-generic-recommended texlive-latex-base \
         texlive-latex-recommended \
         texlive-fonts-recommended texlive-font-utils \
+        texlive-fonts-extra \
         texlive-latex-extra texlive-math-extra texlive-pictures \
         texlive-pstricks texlive-science \
         perl-tk purifyeps chktex latexmk dvipng dvidvi \
